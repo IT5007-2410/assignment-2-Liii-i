@@ -10,14 +10,35 @@ const initialTravellers = [
     bookingTime: new Date(),
     seatNumber:2
   },
+  {
+    id: 3, name: 'John', phone: 88883333,
+    bookingTime: new Date(),
+    seatNumber:3
+  },
+  {
+    id: 4, name: 'Doe', phone: 88882222,
+    bookingTime: new Date(),
+    seatNumber:4
+  },
+  {
+    id: 5, name: 'Jane', phone: 88881111,
+    bookingTime: new Date(),
+    seatNumber:5
+  }
 ];
 
 
 function TravellerRow(props) {
-  {/*Q3. Placeholder to initialize local variable based on traveller prop.*/}
+  const { id, name, phone, bookingTime, seatNumber } = props.traveller;
+  //Q3. Placeholder to initialize local variable based on traveller prop.*/}
   return (
+    // Q3. Placeholder for rendering one row of a table with required traveller attribute values.*/}
     <tr>
-	  {/*Q3. Placeholder for rendering one row of a table with required traveller attribute values.*/}
+	    <td>{id}</td>
+      <td>{name}</td>
+      <td>{phone}</td>
+      <td>{bookingTime.toLocaleString()}</td>
+      <td>{seatNumber}</td>
     </tr>
   );
 }
@@ -25,20 +46,23 @@ function TravellerRow(props) {
 function Display(props) {
   
 	/*Q3. Write code to render rows of table, reach corresponding to one traveller. Make use of the TravellerRow function that draws one row.*/
-
+  if (props.travellers.length === 0) {
+    return <p>No travellers to display.</p>;
+  }
   return (
     <table className="bordered-table">
       <thead>
         <tr>
-	  {/*Q3. Below table is just an example. Add more columns based on the traveller attributes you choose.*/}
           <th>ID</th>
           <th>Name</th>
           <th>Phone</th>
           <th>Booking Time</th>
+          <th>Seat Number</th>
         </tr>
       </thead>
       <tbody>
         {/*Q3. write code to call the JS variable defined at the top of this function to render table rows.*/}
+        {props.travellers.map(traveller => <TravellerRow key={traveller.id} traveller={traveller} />)}
       </tbody>
     </table>
   );
@@ -119,7 +143,7 @@ class TicketToRide extends React.Component {
       travellers: [], 
       selector: 'home',
       totalSeats: 10,
-      freeSeats: 8
+      freeSeats: 5
     };
     this.bookTraveller = this.bookTraveller.bind(this);
     this.deleteTraveller = this.deleteTraveller.bind(this);

@@ -37,7 +37,7 @@ function TravellerRow(props) {
 	    <td>{id}</td>
       <td>{name}</td>
       <td>{phone}</td>
-      <td>{bookingTime.toLocaleString()}</td>
+      <td>{bookingTime.toLocaleString(('en-US'))}</td>
       <td>{seatNumber}</td>
     </tr>
   );

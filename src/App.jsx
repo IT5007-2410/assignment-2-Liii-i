@@ -71,19 +71,58 @@ function Display(props) {
 class Add extends React.Component {
   constructor() {
     super();
+    this.state = {
+      travellerName: '',
+      travellerPhone:'',
+      seatNumber: '',
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  handleInputChange(e) {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
   }
 
   handleSubmit(e) {
     e.preventDefault();
     /*Q4. Fetch the passenger details from the add form and call bookTraveller()*/
+    const { travellerName, travellerPhone, seatNumber } = this.state;
+    const newTraveller = {
+      name: travellerName,
+      phone: travellerPhone,
+      bookingTime: new Date(),
+      seatNumber: parseInt(seatNumber),
+    };
+    this.props.bookTraveller(newTraveller); 
+    this.setState({ travellerName: '', travellerPhone: '', seatNumber: '' }); // 重置表单
+
   }
 
   render() {
     return (
       <form name="addTraveller" onSubmit={this.handleSubmit}>
 	    {/*Q4. Placeholder to enter passenger details. Below code is just an example.*/}
-        <input type="text" name="travellername" placeholder="Name" />
+        <input 
+          type="text" name="travellerName" placeholder="Name" 
+          value={this.state.travellerName}
+          onChange={this.handleInputChange}
+        />
+        <input 
+          type="text" 
+          name="travellerPhone" 
+          placeholder="Phone" 
+          value={this.state.travellerPhone}
+          onChange={this.handleInputChange} 
+        />
+        <input 
+          type="number" 
+          name="seatNumber" 
+          placeholder="Seat Number" 
+          value={this.state.seatNumber}
+          onChange={this.handleInputChange} 
+        />
         <button>Add</button>
       </form>
     );
@@ -164,8 +203,18 @@ class TicketToRide extends React.Component {
     }, 500);
   }
 
-  bookTraveller(passenger) {
+  bookTraveller(newTraveller) {
 	    /*Q4. Write code to add a passenger to the traveller state variable.*/
+    const newId = this.state.travellers.length > 0 
+    ? Math.max(...this.state.travellers.map(t => t.id)) + 1 
+    : 1;
+  
+    const travellerWithId = { ...newTraveller, id: newId };
+
+    this.setState((prevState) => ({
+      travellers: [...prevState.travellers, travellerWithId],
+      freeSeats: prevState.freeSeats - 1 
+    }));
   }
 
   deleteTraveller(passenger) {

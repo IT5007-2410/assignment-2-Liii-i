@@ -133,18 +133,33 @@ class Add extends React.Component {
 class Delete extends React.Component {
   constructor() {
     super();
+    this.state = {
+      travellerName: '',
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+  handleInputChange(e) {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
   }
   handleSubmit(e) {
     e.preventDefault();
     /*Q5. Fetch the passenger details from the deletion form and call deleteTraveller()*/
+    const { travellerName } = this.state;
+    this.props.deleteTraveller(travellerName);
+    this.setState({ travellerName: '' }); 
   }
 
   render() {
     return (
       <form name="deleteTraveller" onSubmit={this.handleSubmit}>
 	    {/*Q5. Placeholder form to enter information on which passenger's ticket needs to be deleted. Below code is just an example.*/}
-	<input type="text" name="travellername" placeholder="Name" />
+	    <input 
+      type="text" name="travellerName" placeholder="Name" 
+      value={this.state.travellerName} 
+      onChange={this.handleInputChange}
+      />
         <button>Delete</button>
       </form>
     );
@@ -217,8 +232,19 @@ class TicketToRide extends React.Component {
     }));
   }
 
-  deleteTraveller(passenger) {
-	  /*Q5. Write code to delete a passenger from the traveller state variable.*/
+  deleteTraveller(travellerName) {
+    this.setState((prevState) => {
+      const updatedTravellers = prevState.travellers.filter(
+        traveller => traveller.name.toLowerCase() !== travellerName.toLowerCase()
+      );
+  
+      const updatedFreeSeats = prevState.freeSeats + (prevState.travellers.length - updatedTravellers.length);
+      
+      return { 
+        travellers: updatedTravellers, 
+        freeSeats: updatedFreeSeats 
+      };
+    });
   }
   render() {
     return (

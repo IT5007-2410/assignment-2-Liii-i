@@ -167,29 +167,37 @@ class Delete extends React.Component {
 }
 
 class Homepage extends React.Component {
-	constructor() {
-	super();
-	}
-	render(){
+  constructor() {
+    super();
+  }
+  
+  render() {
     const { totalSeats, freeSeats } = this.props;
-    const resevedSeats = totalSeats - freeSeats;
-	return (
-	<div>
-    <h2>Free Seats: {freeSeats}/{totalSeats}</h2>
-    <div>
-      {Array.from({ length: totalSeats }, (_, index) => (
-        <button
-          key={index}
-          style={{ backgroundColor: index < resevedSeats ? 'red' : 'green' }}
-          disabled={index < resevedSeats}
-        >
-          {index + 1}
-        </button>
-      ))}
-    </div>
-  </div>);
-	}
+    const reservedSeats = totalSeats - freeSeats;
+    const percentageFree = ((freeSeats / totalSeats) * 100).toFixed(1); // 计算空座位的百分比
+
+    return (
+      <div>
+        <h2>Free Seats: {freeSeats}/{totalSeats} ({percentageFree}%)</h2>
+        <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '20px' }}>
+          {Array.from({ length: totalSeats }, (_, index) => (
+            <div
+              key={index}
+              style={{
+                width: '30px',
+                height: '30px',
+                margin: '5px',
+                backgroundColor: index < reservedSeats ? 'grey' : 'green',
+                borderRadius: '5px'
+              }}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
 }
+
 class TicketToRide extends React.Component {
   constructor() {
     super();
